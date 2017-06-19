@@ -1,2 +1,24 @@
 ---
-# tasks file for ramblerainbow.docker
+- name: depedence packages
+  package:
+    name: "{{item}}"
+    state: present 
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: add docker repo
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: install docker 
+  yum:
+    name: docker-ce
+    update_cache: yes
+    state: present
+
+- name: enable docker service
+  service:
+    name: docker
+    enabled: yes
+    state: started
